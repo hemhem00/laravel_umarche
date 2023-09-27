@@ -36,7 +36,7 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:admin')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
@@ -73,15 +73,15 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::get('/', function () {
-  return view('welcome');
+  return view('admin.welcome');
 });
 
 Route::get('/dashboard', function () {
-  return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+  return view('admin.dashboard');
+})->middleware(['auth:admin', 'verified'])->name('dashboard');
 
-≈
-Route::middleware('auth')->group(function () {
+//この辺で間違っている可能性あり  auth:adminが間違っているかも
+Route::middleware('auth:admin')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -112,7 +112,8 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+//この辺で間違っている可能性あり  auth:adminが間違っているかも
+Route::middleware('auth:admin')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

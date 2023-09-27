@@ -18,6 +18,8 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/dashboard';
+    public const OWNER_HOME = '/owner/dashboard';
+    public const ADMIN_HOME = '/admin/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -29,12 +31,32 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::middleware('api')
+                Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
+
+                Route::prefix('admin')
+                ->as('admin.')
+                ->middleware('web')
+                //namespaceは追記　エラー出るかも
+                ->namespace($this->namespace)
+                ->group(base_path('routes/admin.php'));
+
+
+                Route::prefix('owner')
+                ->as('owner.')
+                ->middleware('web')
+                //namespaceは追記　エラー出るかも
+                ->namespace($this->namespace)
+                ->group(base_path('routes/owner.php'));
+
+                Route::prefix('/')
+            ->as('user.')
+            ->middleware('web')
+            //namespaceは追記　エラー出るかも
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
         });
     }
 
